@@ -1,0 +1,59 @@
+Tema consta in fisierele: feribot.cpp, stocks.cpp, prinel.cpp si crypto.cpp
+
+1. Feribot
+
+Ideea este ca fac o cautare binara pentru a obtine eficient rezultatul. Caut binar cea mai mica valoare 
+x cu proprietatea ca pot imparti cele n masini in cele k feriboturi astfel incat greutatea de pe fiecare 
+feribot sa fie maximum x. Pornesc cu capatul stanga fiind cea mai mare greutate a unei masini, iar capatul
+din dreapta este suma tuturor greutatilor. Caut binar si pentru fiecare mid verific daca este valid, adica
+daca pot imparti masinile in maximum k feriboturi cu conditia sa nu am o greutate mai mare decat mid pe un
+feribot. De fiecare data cand ajung la o greutate mai mare decat mid incep un nou feribot. Daca numarul de 
+feriboturi este <= k, atunci stiu ca mid este o solutie si atunci fac answer = mid si caut mai departe in 
+partea stanga pentru a gasi o valoare si mai mica. Daca nu e valid, e clar ca imi trebuie o valoare mai mare
+(cea curenta e prea mica pentru a satisface conditia) si atunci ma duc in partea dreapta. 
+
+Complexitate: O(n * log(S)), unde S este suma greutatilor masinilor
+
+2. Stocks
+
+La aceasta problema fac o programare dinamica cu o matrice dp cu B linii si L coloane. Semnificatia este:
+dp[i][j] = profitul maxim pe care il pot obtine investind i dolari si cu o pierdere maxima de j dolari.
+raspunsul este maximul din matricea dp, adica profitul maxim pe care il pot obtine investind maximum B dolari
+(pot sa investesc si mai putin decat B, nu e obligatoriu sa i investesc pe toti) si cu o pierdere maxima de 
+L dolari. Iau fiecare actiune (stock) si incerc sa imbunatatesc solutia finala cu ajutorul acestei actiuni.
+Practic, pentru fiecare element pozitiv din matrice (profit maxim curent cu i dolari investiti si pierdere 
+maxima j) incerc sa vad daca adaugarea stock ului curent la aceasta solutie este benefica, adica daca obtin
+un profit mai mare decat am deja. 
+
+Complexitate: O(n * b * l)
+
+3. Prinel
+
+Problema consta in 2 pasi, prima data calculez pentru fiecare i distanta minima de la 1 la target[i], 
+cu regula din enunt. Pentru aceasta folosesc un vector dist pe care il completez pana la valoarea maxima 
+din vectorul target, pentru ca apoi sa accesez dist[target[i]]. acest vector dist se construieste 
+plecand de la 1 si pentru fiecare i, daca am deja distanta minima pana la el (adica dist[i] < INF), 
+actualizez distantele pana la toate valorile i + x, unde x este un divizor al lui i. la final, am 
+distantele pana la toate elementele din target, deci problema devine un rucsac si am rezolvat-o 
+cu programare dinamica. am vectorul dp in care dp[i] = nr maxim de puncte pe care le pot obtine 
+folosind i operatii. La final raspunsul este maximul din acest vector.
+
+Complexitate: 	calcul dist: O(T * sqrt(T)), unde T = max(target[i])
+				rucsac: O (n * k)
+
+4. Crypto
+
+Ideea este destul de simpla, folosesc o programare dinamica cu matricea dp, cu N linii si L coloane.
+dp[i][j] = numarul de moduri in care pot forma primele j caractere din S folosind primele i caractere
+din K. la final, rezultatul este dp[N][L], adica numarul de moduri in care pot forma tot sirul S
+din tot sirul K, avand posibilitatea de a inlocui caracterele '?'. matricea dp se completeaza astfel:
+prima data, adaug numarul de cazuri in care nu extind prefixul din S. apoi adaug numarul de cazuri 
+in care se extinde prefixul din S. cu totul o sa obtin numarul de moduri in care pot sa obtin primele 
+j caractere din S folosind doar primele i caractere din K, luand in calcul ordinea lor din K. practic,
+acesta este numarul de variante in care pot alege prefixul de lungime j din S ca subsir al prefixului 
+de lungime i din K. la final, dp[n][l] reprezinta numarul de moduri in care prefixul de lungime l din S, 
+adica tot sirul S poate fi ales ca subsir al lui K(modulo 10^9 + 7), adica rezultatul cerut.
+
+Complexitate: O(n * l)
+
+
